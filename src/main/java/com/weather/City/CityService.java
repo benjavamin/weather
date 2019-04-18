@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -34,9 +35,9 @@ public class CityService {
         System.out.println("Sending GET request to URL: " + url);
         System.out.println("Server responded with: " + responseCode);
 
-        /*con.setDoOutput(true);
+        con.setDoOutput(true);
         DataOutputStream out = new DataOutputStream(con.getOutputStream());
-        out.writeBytes(ParameterStringBuilder ); */
+        
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
