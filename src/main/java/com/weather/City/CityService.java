@@ -1,20 +1,20 @@
 package com.weather.City;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.weather.ParameterBuilder.ParamBuilder;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import javax.annotation.Resource;
+import java.io.*;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URLConnection;
 
-@Service
+
 @Data
 public class CityService {
 
@@ -24,11 +24,16 @@ public class CityService {
 
     public String searchByCityName(String cityName) throws IOException {
 
-        URL url = new URL("http://dataservice.accuweather.com/locations/v1/cities/search");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
+        URL url = new URL("http://dataservice.accuweather.com/locations/v1/cities/search?apikey=" + apiKey + "&q=" + cityName);
+        URLConnection con = url.openConnection();
+        con.connect();
 
-        Map<String, String> parameters = new HashMap<>();
+
+        JsonParser jsonParser = new JsonParser();
+        JsonElement root = jsonParser.parse(new InputStreamReader((InputStream) con.getContent()));
+        JsonObject rootObj = root.getAsJsonObject();
+
+        /*Map<String, String> parameters = new HashMap<>();
 
         parameters.put("apikey", this.getApiKey());
         parameters.put("q", "Sarajevo");
@@ -60,7 +65,8 @@ public class CityService {
         con.disconnect();
         System.out.println(response);
 
-        return response.toString();
+        return response.toString();*/
 
+        return String.valueOf(rootObj.get("Key"));
     }
 }
