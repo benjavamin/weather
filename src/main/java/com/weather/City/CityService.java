@@ -32,9 +32,13 @@ public class CityService {
         JsonArray rootArray = root.getAsJsonArray();
         String locationKey = rootArray.get(0).getAsJsonObject().get("Key").getAsString();
 
-        URL urlTemp = new URL("http://dataservice.accuweather.com/currentconditions/v1/");
+        URL urlTemp = new URL("http://dataservice.accuweather.com/currentconditions/v1/" + locationKey + "?apikey=" + apiConfig.getApikey());
         con = urlTemp.openConnection();
         con.connect();
+
+        JsonElement getTemperatures = jsonParser.parse(new InputStreamReader((InputStream) con.getContent()));
+        JsonArray tempArray = getTemperatures.getAsJsonArray();
+
 
         return locationKey;
     }
